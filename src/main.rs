@@ -1,5 +1,8 @@
 use std::fs::File;
 use std::io::{stdin, stdout, Read, Write};
+use std::collections::HashMap;
+
+
 fn main() {
     let user_serch = user_input();
     let content = match read_file() {
@@ -9,8 +12,10 @@ fn main() {
             return;
         }
     };
+    println!("{}", content);
 
-    sercher(user_serch, content);
+    let x = sercher(user_serch, content);
+    print!("{}", x);
 }
 
 /// Read
@@ -21,10 +26,6 @@ fn read_file() -> Result<String, std::io::Error> {
     Ok(contents)
 }
 
-/// check is the input from the user equle with somhing in the file.
-fn sercher(user_serch: String, file: String) {
-    assert_eq!(user_serch, file);
-}
 /// Aske the user for a input and give it back as string ´user_input´
 fn user_input() -> String {
     let mut user_input: String = String::new();
@@ -32,4 +33,16 @@ fn user_input() -> String {
     let _ = stdout().flush();
     stdin().read_line(&mut user_input).unwrap();
     user_input
+}
+
+/// check is the input from the user equle with somhing in the file.
+fn sercher(user_serch: String, conntent: String) -> (u8) {
+    let mut x: u8 = 0;
+    let mut word_counts:HashMap<String, u32> = HashMap::new();
+    for word in conntent.split_whitespace() {
+        let count = word_counts.entry(word.to_string()).or_insert(0);
+        *count += 1;
+        x = x + 1;
+    }
+   return x;
 }
