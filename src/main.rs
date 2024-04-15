@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 
 fn main() {
-    let user_serch = user_input();
+    let user_serch: String = user_input();
     let content = match read_file() {
         Ok(v) => v,
         Err(e) => {
@@ -13,9 +13,7 @@ fn main() {
         }
     };
     println!("{}", content);
-
-    let x = sercher(user_serch, content);
-    print!("{}", x);
+    sercher(user_serch, content);
 }
 
 /// Read
@@ -32,17 +30,23 @@ fn user_input() -> String {
     println!("please enter a serch: ");
     let _ = stdout().flush();
     stdin().read_line(&mut user_input).unwrap();
-    user_input
+    String::from(user_input.trim())
 }
 
 /// check is the input from the user equle with somhing in the file.
-fn sercher(user_serch: String, conntent: String) -> (u8) {
+fn sercher(user_serch: String, conntent: String) -> u8 {
     let mut x: u8 = 0;
+    let mut y: u8 = 0;
+    let user_serch: &str = user_serch.as_str();
     let mut word_counts:HashMap<String, u32> = HashMap::new();
     for word in conntent.split_whitespace() {
         let count = word_counts.entry(word.to_string()).or_insert(0);
         *count += 1;
+        if word.contains(user_serch) {
+            y = y + 1;
+        }
         x = x + 1;
     }
-   return x;
+    println!("{}/{}",y, x);
+   return y;
 }
